@@ -1,4 +1,4 @@
-package com.example.browsertest;
+package com.example.test;
 
 // Import the UiAutomator libraries
 
@@ -33,12 +33,12 @@ import android.os.HandlerThread;
 import android.os.RemoteException;
 
 /*
- * Browser Test activity
+ * App Test activity
  * Main activity which contains the script for automation testing
  * @authors Smriti Tuteja
  */
 
-public class BrowserTestCases extends UiAutomatorTestCase {
+public class TestCases extends UiAutomatorTestCase {
 
 	int serial_no = 0;
 	StringBuffer report = new StringBuffer("");
@@ -59,7 +59,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 	UiObject newtab;
 	UiObject settings;
 	UiObject urlClass;
-	String appName = "Browser_Android";
+	String appName = "App_Android";
 	String currentDate;
 	String appVersion;
 	String appBuildType;
@@ -72,13 +72,12 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		appViews = new UiScrollable(new UiSelector().scrollable(true));
 		selector = new UiSelector().className(android.widget.TextView.class
 				.getName());
-		main_menu = new UiObject(new UiSelector().resourceId("com.example.browsertest.mobile:id/settings_menu"));
-		omnibox = new UiObject(new UiSelector().resourceId("com.example.browsertest.mobile:id/url"));
-		tab_count = new UiObject(new UiSelector().resourceId("com.example.browsertest.mobile:id/countTab"));
+		main_menu = new UiObject(new UiSelector().resourceId("com.example.test.mobile:id/settings_menu"));
+		omnibox = new UiObject(new UiSelector().resourceId("com.example.test.mobile:id/url"));
+		tab_count = new UiObject(new UiSelector().resourceId("com.example.test.mobile:id/countTab"));
 		newtab = new UiObject(
 				new UiSelector()
-						.resourceId("com.example.browsertest.mobile:id/newTab"));
-		myBookmarks = new UiObject(new UiSelector().text("My Bookmarks"));
+						.resourceId("com.example.test.mobile:id/newTab"));
 		settings = new UiObject(new UiSelector().text("Settings"));
 		urlClass = new UiObject(
 				new UiSelector().className("android.widget.EditText"));
@@ -93,7 +92,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 				String logDate = null;
 				String logTestCases_passed = null;
 				String logTestCases_failed = null;
-				String serverUrl = "http://abc.com/androidlogs/browserindex.php";
+				String serverUrl = "http://abc.com/androidlogs/testindex.php";
 				finalReport = report.toString();
 				logData = finalReport;
 				logName = appName;
@@ -143,8 +142,6 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		currentDate = sdf.format(date);
 		System.out.println("Today's date : " + currentDate);
 
-		// Launch Browser
-		launchBrowser();
 
 		// Email Signup
 		appendSerialNumber();
@@ -189,10 +186,10 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		getUiDevice().pressHome();
 		sleep(3000);
 		try {
-			UiObject BrowserHome = new UiObject(
-					new UiSelector().text("Browser"));
-			assertTrue("App shortcut not created", BrowserHome.exists());
-			report.append("<td> Browser shortcut created </td>");
+			UiObject AppHome = new UiObject(
+					new UiSelector().text("App_Android"));
+			assertTrue("App shortcut not created", AppHome.exists());
+			report.append("<td> App shortcut created </td>");
 			testCaseSuccessMessage();
 		} catch (AssertionError ex) {
 			AppendMessageWithTags(ex);
@@ -203,6 +200,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 
 		// Take app version
 		System.out.println("Taking app version");
+		
 		// open menu
 		openMenu();
 
@@ -250,61 +248,6 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 			AppendMessageWithTags(ex);
 		}
 
-		// Open new tab
-		launchNewTab();
-
-		// Open menu
-		openMenu();
-
-		// Search engine selection
-		appendSerialNumber();
-		System.out.println("Search Engine Change Check");
-		report.append("<td> Search Engine Change Check</td>");
-		try {
-			assertTrue("Settings page not found", settings.exists());
-			settings.click();
-			sleep(5000);
-			report.append("<td>Settings Page Opened</br>");
-			UiObject searchEngine = new UiObject(
-					new UiSelector().text("Search Engine"));
-			if (searchEngine.exists()) {
-				searchEngine.click();
-				sleep(3000);
-				//changing search engine to Bing
-				new UiObject(new UiSelector().text("Bing")).click();
-				report.append("Setting search engine to Bing</br>");
-				getUiDevice().pressBack();
-				if (omnibox.exists()) {
-					omnibox.click();
-					omnibox.setText("key");
-					sleep(5000);
-					getUiDevice().click(735, 1135);
-					sleep(5000);
-					if (urlClass.getText().contains("bing")) {
-						report.append("Search Engine set to Bing </td>");
-						testCaseSuccessMessage();
-					} else {
-						report.append("Bing not set as search engine</td>");
-						testCaseFailureMessage();
-					}
-				} else {
-					report.append("Could not type in omnibar</td>");
-					testCaseFailureMessage();
-				}
-			} else {
-				report.append("Search Engine option not found</td>");
-				testCaseFailureMessage();
-				getUiDevice().pressBack();
-			}
-
-		} catch (AssertionError ex) {
-			report.append("<td>");
-			AppendMessageAlone(ex);
-			report.append("</br> Search Engine Check Failure</td>");
-			testCaseFailureMessage();
-		}
-
-
 
 		// Email Broadcast
 		appendSerialNumber();
@@ -335,7 +278,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 			UiObject emailSubject = new UiObject(
 					new UiSelector().text("Subject"));
 			emailSubject.click();
-			emailSubject.setText("Browser Android " + appVersion
+			emailSubject.setText("App Android " + appVersion
 					+ " Automation Test Report");
 			UiObject composeEmail = new UiObject(
 					new UiSelector().text("Compose email"));
@@ -345,7 +288,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 					+ appBuildType
 					+ " build "
 					+ appVersion
-					+ " -\n\nhttp://abc.com/reports/browserTestReports/Browser_Android_v0.0.1_Development.html\n\nIt covers all the following use cases :\n\n[1] Launch and Walkthrough\n[2] Email signup\n[3] Currency color checks on partner visits through various means:\n i) Direct Visit\nii) Green highlighted search results page visit\niv) Omnibar store visit\n[4] Checking app shortcut on home screen \n[5] Relaunching app from background\n[6] Opening links form third party apps\n[7] Launching browser from notification panel\n[8] Check-in functionality\n[9] Bookmark functionality\n[11] Clear history check\n[12] Search Engine change check\n[13] Private Browsing History Check\n[14] Currency checks before and after Log Out\n[15] Email Broadcast\n\nThanks\nSmriti\n---\nThis is an automated email broadcast";
+					+ " -\n\nhttp://abc.com/reports/TestReports/App_Android_v0.0.1_Development.html\n\n";
 			composeEmail.setText(emailBody);
 			new UiObject(new UiSelector().description("Send")).click();
 			report.append("Email sent </td>");
@@ -354,11 +297,13 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 			AppendMessageWithTags(ex);
 		}
 
-		report.append("</table></br></br><b><center>&copy; 2014 </center></b></body></html>");
+		report.append("</table></body></html>");
 		if (testreport != null)
 			testreport.run();
 
 	}
+
+
 
 	//appending serial number in report
 	public void appendSerialNumber() {
@@ -376,7 +321,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		report.append("<td> Relaunch app from background </td>");
 		getUiDevice().pressRecentApps();
 		sleep(5000);
-		appBackground = new UiObject(new UiSelector().description("Browser"));
+		appBackground = new UiObject(new UiSelector().description("App_Android"));
 		try {
 			assertTrue("App doesn't exist in background",
 					appBackground.exists());
@@ -449,16 +394,34 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		sleep(5000);
 		checkCrash();
 	}
-
-	//checking for crash
+	
+	
+	//check ANR
+	public void checkANR() {
+		UiObject perkANR = new UiObject(
+				new UiSelector()
+						.text("App_Android isn't responding. Do you want to close it?"));
+		if (perkANR.exists()) {
+			System.out.println("ANR");
+			report.append("</table>");
+			report.append("<h1 style=\"text-align:center;background-color:#ff6347;\">App_Android  is not responding : ANR!!</h1></body></html>");
+			if (testreport != null) {
+				testreport.run();
+			}
+			System.exit(0);
+		}
+	}
+	
+	
+	//checking for app crash
 	public void checkCrash() {
 		UiObject Crash = new UiObject(
-				new UiSelector().text("Unfortunately, Browser has stopped."));
+				new UiSelector().text("Unfortunately, App_Android has stopped."));
 		if (Crash.exists()) {
 			System.out.println("CRASH");
 			report.append("</td>");
 			testCaseFailureMessage();
-			report.append("</table><h1 style=\"text-align:center;background-color:#ff6347;\">BROWSER CRASHED!!</h1></br><b><center>&copy; 2014</center></b></body></html>");
+			report.append("</table><h1 style=\"text-align:center;background-color:#ff6347;\">APP CRASHED!!</h1></body></html>");
 			if (testreport != null) {
 				testreport.run();
 			}
