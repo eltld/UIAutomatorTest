@@ -43,15 +43,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 	int serial_no = 0;
 	StringBuffer report = new StringBuffer("");
 	String finalReport = null;
-	public static final String client_id = "lkwe6wsa2380kmnd";
-	public static final String client_secret = "cd2d08efe7c8fd5fa325";
-	public static final String partner_check_api_url = "https://xyz.com";
 	public static final String third_party_app_url = "abc.com/androidlogs/links.html";
-	public static final String enter_url = "800bear.com";
-	public static final String enter_url1 = "hotels.com";
-	public static final String enter_url2 = "google.com";
-	public static final String enter_url3 = "basketballexpress.com";
-	public static final String enter_url4 = "ftd.com";
 	public static final String private_browsing_key = "web";
 	public static int testcases_passed = 0;
 	public static int testcases_failed = 0;
@@ -341,7 +333,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 				UiObject loginemail = new UiObject(
 						new UiSelector().description("loginemail"));
 				loginemail.clearTextField();
-				loginemail.setText("smriti@kickbaq.com");
+				loginemail.setText("xyz@abc.com");
 				getUiDevice().pressBack();
 				UiObject psswrd = new UiObject(
 						new UiSelector().description("password"));
@@ -451,7 +443,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		// Direct store visit
 		appendSerialNumber();
 		System.out.println("Direct Store Visit");
-		report.append("<td>Direct Store Visit - 800bear.com : </br></br> i) Partner Check </br></br> ii) Currency Check</td>");
+		report.append("<td>Direct Store Visit - 800bear.com : </br></br> i) Currency Check</td>");
 
 		try {
 			assertTrue("Direct Visit Fail", omnibox.exists());
@@ -466,8 +458,6 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 			getUiDevice().pressBack();
 
 			report.append("<td></br>");
-			partnerCheck(enter_url);
-			sleep(7000);
 			getCurrencyDetails();
 			if ((yellowCurrency.exists()) && (result.contains("true"))) {
 				testCaseSuccessMessage();
@@ -570,31 +560,20 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		// relaunch app from background
 		relaunchAppBackground();
 
-		/*
-		 * // Shift tabs if (new UiObject(new
-		 * UiSelector().textContains(enter_url1)).exists()) { new UiObject(new
-		 * UiSelector().textContains(enter_url1)).click(); } if (new
-		 * UiObject(new UiSelector().textContains("Bob")).exists()) { new
-		 * UiObject(new UiSelector().textContains("Bob")).click(); } if (new
-		 * UiObject(new UiSelector().textContains("New")).exists()) { new
-		 * UiObject(new UiSelector().textContains("New")).click(); }
-		 */
-
 		// Open new tab
 		launchNewTab();
 
 		// Non partner store visit
 		appendSerialNumber();
 		System.out.println("Non Partner Store Visit");
-		report.append("<td>Non Partner Store Visit - Google.com : </br></br> i) Partner Check </br></br> ii) Currency Check</td>");
+		report.append("<td>Non Partner Store Visit - Google.com : </br></br> i)Currency Check</td>");
 
 		try {
 			assertTrue("Could not type in omnibar", omnibox.exists());
 			omnibox.click();
-			omnibox.setText(enter_url2);
+			omnibox.setText("google.com");
 			getUiDevice().click(735, 1135);
 			report.append("<td></br>");
-			partnerCheck(enter_url2);
 			getCurrencyDetails();
 			if ((greyCurrency.exists()) && (result.contains("false"))) {
 				testCaseSuccessMessage();
@@ -614,7 +593,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		// Omnibar store visit
 		appendSerialNumber();
 		System.out.println("Omnibar Store Visit");
-		report.append("<td>Omnibar Store Visit - Basketball Express.com : </br></br> i) Partner Check </br></br> ii) Currency Check</td>");
+		report.append("<td>Omnibar Store Visit - Basketball Express.com : </br></br> i) Currency Check</td>");
 
 		try {
 			assertTrue("Could not type in omnibar", omnibox.exists());
@@ -623,7 +602,6 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 			sleep(8000);
 			getUiDevice().click(322, 208);
 			report.append("<td></br>");
-			partnerCheck(enter_url3);
 			sleep(5000);
 			getCurrencyDetails();
 			getGreenCurrency();
@@ -655,7 +633,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		// Green injected results Store visit
 		appendSerialNumber();
 		System.out.println("Green injected results Store Visit");
-		report.append("<td>Green injected results Store Visit - Ftd.com : </br></br> i) Partner Check </br></br> ii) Currency Check</td>");
+		report.append("<td>Green injected results Store Visit - Ftd.com : </br></br> i) Currency Check</td>");
 
 		try {
 			assertTrue("Could not type in omnibar", omnibox.exists());
@@ -665,7 +643,6 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 			getUiDevice().click(735, 1135);
 			sleep(8000);
 			report.append("<td></br>");
-			partnerCheck(enter_url4);
 			getUiDevice().click(216, 583);
 			sleep(6000);
 			getCurrencyDetails();
@@ -673,50 +650,6 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 			sleep(15000);
 		} catch (AssertionError ex) {
 			AppendMessageWithTags(ex);
-		}
-
-		// orb launch
-		orbLaunch();
-
-		// Redeem Gift Card
-		appendSerialNumber();
-		System.out.println("Redemption");
-		report.append("<td>Redemption </td>");
-		UiObject rewards = new UiObject(new UiSelector().description("Redeem"));
-		try {
-			assertTrue("Couldn't view Rewards page", rewards.exists());
-			rewards.click();
-			report.append("<td> Rewards page opened </br>");
-			sleep(15000);
-			UiObject gift_card = new UiObject(new UiSelector().resourceId("com.example.browsertest.mobile:id/grid_item_image"));
-
-			if (gift_card.exists()) {
-				gift_card.click();
-				report.append("Gift Card clicked</br>");
-
-					if (new UiObject(new UiSelector().resourceId("com.example.browsertest.mobile:id/iv_redeemDetailsLocked")).exists()) {
-
-					report.append("This reward is locked.</br></br>Checking another reward</br>");
-					getUiDevice().pressBack();
-					new UiObject(
-							new UiSelector().text("$5 Golfsmith Gift Card"))
-							.click();
-					report.append("Gift Card clicked</br>");
-					redeemRewards();
-				} else {
-					redeemRewards();
-				}
-
-			} else {
-				report.append("Page loading slow - Gift Card not found</br></br>Redemption Fail");
-				testCaseFailureMessage();
-				getUiDevice().pressBack();
-			}
-		} catch (AssertionError ex) {
-			report.append("<td>");
-			AppendMessageAlone(ex);
-			report.append("</br></br>Redemption Fail</td>");
-			testCaseFailureMessage();
 		}
 
 		// Open new tab
@@ -730,9 +663,9 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		try {
 			assertTrue("Could not type in omnibar", omnibox.exists());
 			omnibox.click();
-			omnibox.setText("target.com");
+			omnibox.setText("google.com");
 			sleep(7000);
-			report.append("<td>Checking Target.com store for bookmark functionality</br>");
+			report.append("<td>Checking site for bookmark functionality</br>");
 			getUiDevice().click(735, 1135);
 			sleep(7000);
 			UiObject bookmark = new UiObject(
@@ -781,7 +714,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 					.className("android.widget.TextView").index(1));
 			if (bookmark_check_class.exists()) {
 				String bookmark_check = bookmark_check_class.getText();
-				if (bookmark_check.contains("target")) {
+				if (bookmark_check.contains("google")) {
 					report.append("Bookmark Saved!</td>");
 					testCaseSuccessMessage();
 					getUiDevice().pressBack();
@@ -1081,7 +1014,7 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 					+ appBuildType
 					+ " build "
 					+ appVersion
-					+ " -\n\nhttp://abc.com/reports/browserTestReports/Browser_Android_v0.0.1_Development.html\n\nIt covers all the following use cases :\n\n[1] Launch and Walkthrough\n[2] Email signup\n[3] Currency color checks on partner visits through various means:\n i) Direct Visit\nii) Green highlighted search results page visit\niv) Omnibar store visit\n[4] Checking app shortcut on home screen \n[5] Relaunching app from background\n[6] Opening links form third party apps\n[7] Launching browser from notification panel\n[8] Check-in functionality\n[9] Redemption\n[10] Bookmark functionality\n[11] Clear history check\n[12] Search Engine change check\n[13] Private Browsing History Check\n[14] Currency checks before and after Log Out\n[15] Email Broadcast\n\nThanks\nSmriti\n---\nThis is an automated email broadcast";
+					+ " -\n\nhttp://abc.com/reports/browserTestReports/Browser_Android_v0.0.1_Development.html\n\nIt covers all the following use cases :\n\n[1] Launch and Walkthrough\n[2] Email signup\n[3] Currency color checks on partner visits through various means:\n i) Direct Visit\nii) Green highlighted search results page visit\niv) Omnibar store visit\n[4] Checking app shortcut on home screen \n[5] Relaunching app from background\n[6] Opening links form third party apps\n[7] Launching browser from notification panel\n[8] Check-in functionality\n[9] Bookmark functionality\n[11] Clear history check\n[12] Search Engine change check\n[13] Private Browsing History Check\n[14] Currency checks before and after Log Out\n[15] Email Broadcast\n\nThanks\nSmriti\n---\nThis is an automated email broadcast";
 			composeEmail.setText(emailBody);
 			new UiObject(new UiSelector().description("Send")).click();
 			report.append("Email sent </td>");
@@ -1133,73 +1066,6 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		}
 	}
 
-	public void partnerCheck(String passedurl) {
-
-		final String check_url = passedurl;
-		final CountDownLatch latch = new CountDownLatch(1);
-
-		HandlerThread uiThread = new HandlerThread("UIHandler") {
-			public synchronized void run() {
-
-				try {
-
-					System.out.print("\n");
-
-					HttpParams params = new BasicHttpParams();
-					params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
-							HttpVersion.HTTP_1_1);
-					HttpClient httpClient = new DefaultHttpClient(params);
-					HttpPost post = new HttpPost(partner_check_api_url);
-					post.setHeader("Content-Type",
-							"application/x-www-form-urlencoded");
-
-					post.setEntity(new StringEntity("client_id=" + client_id
-							+ "&" + "client_secret=" + client_secret + "&"
-							+ "url=" + check_url));
-					HttpResponse response = httpClient.execute(post);
-					int i = response.getStatusLine().getStatusCode();
-					System.out.println("HTTP Post status for Check Partner: "
-							+ i);
-					BufferedReader in = new BufferedReader(
-							new InputStreamReader(response.getEntity()
-									.getContent()));
-
-					// SB to make a string out of the inputstream
-					StringBuffer sb = new StringBuffer("");
-					String line = "";
-					String NL = System.getProperty("line.separator");
-					while ((line = in.readLine()) != null) {
-						sb.append(line + NL);
-					}
-					in.close();
-
-					// the json string is stored here
-					result = sb.toString();
-					System.out.println("Result is :" + result);
-					report.append("</br>");
-					if (result.contains("true")) {
-						report.append("True");
-					} else {
-						report.append("False");
-					}
-					report.append("</br></br>");
-					value = result;
-					latch.countDown();
-				}
-
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-
-		uiThread.start();
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public void getCurrencyDetails() throws UiObjectNotFoundException {
 		getCurrencyColorPoints();
@@ -1298,53 +1164,6 @@ public class BrowserTestCases extends UiAutomatorTestCase {
 		}
 	}
 
-	public void redeemRewards() throws UiObjectNotFoundException {
-
-		// redeem now - native
-		UiObject redeem_now_native = new UiObject(
-				new UiSelector().text("Redeem Now"));
-
-		if (redeem_now_native.exists()) {
-			redeem_now_native.click();
-			sleep(6000);
-			report.append("Redeem Now clicked</br>");
-
-			// redeem now - webview
-			UiObject redeem_now_webpage = new UiObject(new UiSelector().resourceId("com.example.browsertest.mobile:id/webView"));
-			if (redeem_now_webpage.exists()) {
-				redeem_now_webpage.click();
-				sleep(4000);
-
-				// redemption form
-				new UiObject(new UiSelector().resourceId("com.example.browsertest.mobile:id")).click();
-
-				new UiObject(new UiSelector().resourceId("com.example.browsertest.mobile:id")).swipeUp(10);
-				sleep(4000);
-
-				// submit form
-				getUiDevice().click(735, 1135);
-				sleep(6000);
-				getUiDevice().pressBack();
-				getUiDevice().pressBack();
-				report.append("Redemption Success</td>");
-				testCaseSuccessMessage();
-				getUiDevice().pressBack();
-				getUiDevice().pressBack();
-			} else {
-				report.append("Not Enough Points to Redeem - Redemption Fail</td>");
-				testCaseFailureMessage();
-				getUiDevice().pressBack();
-				getUiDevice().pressBack();
-				getUiDevice().pressBack();
-			}
-
-		} else {
-			report.append("Redeem Now option not found - Redemption Fail</td>");
-			testCaseFailureMessage();
-			getUiDevice().pressBack();
-			getUiDevice().pressBack();
-		}
-	}
 
 	public void launchNewTab() throws UiObjectNotFoundException {
 
